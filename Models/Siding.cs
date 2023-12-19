@@ -9,5 +9,7 @@
         public string State { get; set; }
         public int NumMines { get; set; }
         public double Inventory { get; set; }
+        public string Zone { get; set; }
+        public int AvailableRakes { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace COeX_India1._2.Data
         }
 
         public DbSet<Siding> Sidings { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }
