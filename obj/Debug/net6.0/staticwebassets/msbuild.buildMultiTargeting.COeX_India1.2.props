@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\COeX_India1.2.props" />
+</Project>
