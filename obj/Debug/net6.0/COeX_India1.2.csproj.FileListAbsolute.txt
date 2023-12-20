@@ -86,3 +86,8 @@ C:\Users\Taher\source\repos\COeX_India1.2\obj\Debug\net6.0\refint\COeX_India1.2.
 C:\Users\Taher\source\repos\COeX_India1.2\obj\Debug\net6.0\COeX_India1.2.pdb
 C:\Users\Taher\source\repos\COeX_India1.2\obj\Debug\net6.0\COeX_India1.2.genruntimeconfig.cache
 C:\Users\Taher\source\repos\COeX_India1.2\obj\Debug\net6.0\ref\COeX_India1.2.dll
+C:\Users\Taher\source\repos\COeX_India1.2\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Taher\source\repos\COeX_India1.2\bin\Debug\net6.0\Twilio.dll
+C:\Users\Taher\source\repos\COeX_India1.2\bin\Debug\net6.0\Azure.Communication.Common.dll
+C:\Users\Taher\source\repos\COeX_India1.2\bin\Debug\net6.0\Azure.Communication.Email.dll
+C:\Users\Taher\source\repos\COeX_India1.2\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll

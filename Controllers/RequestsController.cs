@@ -1,10 +1,17 @@
-﻿using COeX_India1._2.Data;
+﻿using Azure;
+using Azure.Communication.Email;
+using COeX_India1._2.Data;
 using COeX_India1._2.Helper;
 using COeX_India1._2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System.Security.Claims;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.TwiML.Messaging;
+using Twilio.Types;
 
 namespace COeX_India1._2.Controllers
 {
@@ -13,10 +20,12 @@ namespace COeX_India1._2.Controllers
     public class RequestsController:Controller
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IConfiguration _config;
 
-        public RequestsController(ApplicationDbContext context)
+        public RequestsController(ApplicationDbContext context, IConfiguration config)
         {
-            _dbContext=context;   
+            _dbContext=context;
+            _config = config;
         }
 
         [HttpPost]
@@ -34,7 +43,7 @@ namespace COeX_India1._2.Controllers
                 Console.WriteLine("Hello1");
 
                 Enum.TryParse(claimUserType, out TokenUserType);
-                if (TokenUserType != Models.User.EUserType.SidingUser) { return BadRequest(new Response(false, "Access Denied")); }
+                if (TokenUserType != Models.User.EUserType.SidingUser) { return BadRequest(new Models.Response(false, "Access Denied")); }
                 Console.WriteLine("Hello2");
 
                 var request = new Requests();
@@ -55,11 +64,12 @@ namespace COeX_India1._2.Controllers
                 activity.InsertedAt = DateTime.UtcNow;
 
                 await _dbContext.Requests.AddAsync(request);
-                await _dbContext.Activities.AddAsync(activity); 
+                await _dbContext.Activities.AddAsync(activity);
 
+                sendEmail("A Request has been added please check");
                 await _dbContext.SaveChangesAsync();
              
-                return Ok(new Response(true, "Request Added Successfully"));
+                return Ok(new Models.Response(true, "Request Added Successfully"));
             }
             catch(Exception ex)
             {
@@ -81,7 +91,7 @@ namespace COeX_India1._2.Controllers
             Console.WriteLine("Hello1");
 
             Enum.TryParse(claimUserType, out TokenUserType);
-            if (TokenUserType != Models.User.EUserType.SidingUser) { return BadRequest(new Response(false, "Access Denied")); }
+            if (TokenUserType != Models.User.EUserType.SidingUser) { return BadRequest(new Models.Response(false, "Access Denied")); }
             var senderId= await _dbContext.Users.Where(s => s.UserId == TokenUserId).Select(s => s.SidingId).FirstOrDefaultAsync();
 
             var requests = await _dbContext.Requests.Where(r => r.SidingId == senderId && r.Status != Models.Requests.EStatus.completed).OrderByDescending(r => r.PlacedOn).ToListAsync();
@@ -120,7 +130,7 @@ namespace COeX_India1._2.Controllers
                 var claimUserType = claimsIdentity.FindFirst("userType")?.Value;
                 var TokenUserType = Models.User.EUserType.Admin;
                 Enum.TryParse(claimUserType, out TokenUserType);
-                if (TokenUserType != Models.User.EUserType.SidingUser) { return BadRequest(new Response(false, "Access Denied")); }
+                if (TokenUserType != Models.User.EUserType.SidingUser) { return BadRequest(new Models.Response(false, "Access Denied")); }
 
 
                 DataHelper dh = new DataHelper();
@@ -138,11 +148,12 @@ Update Requests set FrieghtAmount= @FrieghtAmount, RakesRequired= @RakesRequired
 
 declare @SidingId int
 select @SidingId= SidingId from Requests where Id= @RequestId
-Insert into Activities (SidingId, Title, Value, ColorCode, Acknowledged, InsertedAt) values(@SidingId, 'Request Updated', @Reason, '#ffff99', 0, )
+Insert into Activities (SidingId, Title, Value, ColorCode, Acknowledged, InsertedAt) values(@SidingId, 'Request Updated', @Reason, '#ffff99', 0, GetDate())
 ";
+                await sendEmail("Request has been updated plz verify");
                 dh.ExecuteNonQuery(sqlExp, paras);
 
-                return Ok(new Response(true, "Request updated successfully"));
+                return Ok(new Models.Response(true, "Request updated successfully"));
             }
             catch (Exception ex)
             {
@@ -150,6 +161,35 @@ Insert into Activities (SidingId, Title, Value, ColorCode, Acknowledged, Inserte
             }
 
         }
+
+        [NonAction]
+
+        public async Task<ActionResult> sendEmail(string msg)
+        {
+            var client = new EmailClient(_config["Azure:communicationconnectionString"]);
+
+            var sender = _config["Azure:noReplySender"];
+            var subject = "Testing from Coex";
+
+            var emailResult = await client.SendAsync(WaitUntil.Completed, sender, "anamra1029@gmail.com", subject, "Test Email from Coex India Limited, to display at SIH 2023");
+            Console.WriteLine($"Email Sent. HasCompleted = {emailResult.HasCompleted}");
+
+            return Ok();
+        }
+        //public async Task<ActionResult> sendSMS()
+        //{
+        //    TwilioClient.Init("ACe56b187495464c90294037b20b75080b", "5fb308c58febee98f7ea38ba8a032dd3");
+
+        //    var messageOptions = new CreateMessageOptions(
+        //    new Twilio.Types.PhoneNumber("7440554645"))
+        //    {
+        //        From = new Twilio.Types.PhoneNumber("7440554645"),
+        //        Body = "This is a testing sms from COEX"
+        //    };
+
+        //    MessageResource.Create(messageOptions);
+        //    return Ok(new Response(false, "SMS sent successfully"));
+        //}
 
     }
 }
