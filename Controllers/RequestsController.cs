@@ -52,6 +52,7 @@ namespace COeX_India1._2.Controllers
                 activity.Value = req.Remarks;
                 activity.ColorCode = "#b3ffb3";
                 activity.Acknowledged = false;
+                activity.InsertedAt = DateTime.UtcNow;
 
                 await _dbContext.Requests.AddAsync(request);
                 await _dbContext.Activities.AddAsync(activity); 
@@ -118,7 +119,8 @@ namespace COeX_India1._2.Controllers
                 int.TryParse(claimUserId, out TokenUserId);
                 var claimUserType = claimsIdentity.FindFirst("userType")?.Value;
                 var TokenUserType = Models.User.EUserType.Admin;
-                
+                Enum.TryParse(claimUserType, out TokenUserType);
+                if (TokenUserType != Models.User.EUserType.SidingUser) { return BadRequest(new Response(false, "Access Denied")); }
 
 
                 DataHelper dh = new DataHelper();
@@ -136,7 +138,7 @@ Update Requests set FrieghtAmount= @FrieghtAmount, RakesRequired= @RakesRequired
 
 declare @SidingId int
 select @SidingId= SidingId from Requests where Id= @RequestId
-Insert into Activities (SidingId, Title, Value, ColorCode, Acknowledged) values(@SidingId, 'Request Updated', @Reason, '#ffff99', 0)
+Insert into Activities (SidingId, Title, Value, ColorCode, Acknowledged, InsertedAt) values(@SidingId, 'Request Updated', @Reason, '#ffff99', 0, )
 ";
                 dh.ExecuteNonQuery(sqlExp, paras);
 

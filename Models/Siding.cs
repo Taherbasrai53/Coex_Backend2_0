@@ -12,4 +12,9 @@
         public string Zone { get; set; }
         public int AvailableRakes { get; set; }
     }
+
+    public class UpdateInventoryModel
+    {
+        public double Inventory { get; set; }
+    }
 }
