@@ -37,52 +37,51 @@ namespace COeX_India1._2.Controllers
 
             var activities = await _dbContext.Activities.Where(a=> a.SidingId==sidingId).OrderBy(a => a.InsertedAt).ToListAsync();
             return Ok(activities);
-        }                         
+        }
 
-            //[HttpPost("send")]
-            //public async Task<IActionResult> SendEmail()
-            //{
-            //    try
-            //    {
-            //        using (HttpClient httpClient = new HttpClient())
-            //        {
-            //            httpClient.BaseAddress = new Uri("https://api.smtp2go.com/v3/");
-            //            httpClient.DefaultRequestHeaders.Add("api-key", "api-F17A8257010F48D798630CE34C4DA60A");
+//        [HttpPost("send")]
+//        public async Task<IActionResult> SendEmail()
+//        {
+//            try
+//            {
+//                using (HttpClient httpClient = new HttpClient())
+//                {
+//                    httpClient.BaseAddress = new Uri("https://api.smtp2go.com/v3/");
+//                    httpClient.DefaultRequestHeaders.Add("api-key", "api-F17A8257010F48D798630CE34C4DA60A");
 
-            //            // Replace with your email content
-            //            string subject = "Subject of the email";
-            //            string body = "Testing from Coex";
-            //            string senderEmail = "en21cs301754@medicaps.ac.in";
-            //            string recipientEmail = "taherbasrai5353@gmail.com";
+//                    // Replace with your email content
+//                    string subject = "Subject of the email";
+//                    string body = "Testing from Coex";
+//                    string senderEmail = "en21cs301754@medicaps.ac.in";
+//                    string recipientEmail = "taherbasrai5353@gmail.com";
+//                    string jsonPayload = $@"
+//                    {{
+//                        ""to"": [""{recipientEmail}""],
+//                        ""from"": ""{senderEmail}"",
+//                        ""subject"": ""{subject}"",
+//                        ""html"": ""{body}""
+//                    }}";
 
-            //            string jsonPayload = $@"
-            //        {
-            //            "to": ["{recipientEmail}"],
-            //            "from": "{senderEmail}",
-            //            "subject": "{subject}",
-            //            "html": "{body}"
-            //        }";
+//                    var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-            //            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+//                HttpResponseMessage response = await httpClient.PostAsync("email/send", content);
 
-            //            HttpResponseMessage response = await httpClient.PostAsync("email/send", content);
-
-            //            if (response.IsSuccessStatusCode)
-            //            {
-            //                return Ok("Email sent successfully!");
-            //            }
-            //            else
-            //            {
-            //                string errorMessage = await response.Content.ReadAsStringAsync();
-            //                return BadRequest($"Failed to send email: {errorMessage}");
-            //            }
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        return BadRequest($"Failed to send email: {ex.Message}");
-            //    }
-            //}
+//                if (response.IsSuccessStatusCode)
+//                {
+//                    return Ok("Email sent successfully!");
+//                }
+//                else
+//                {
+//                    string errorMessage = await response.Content.ReadAsStringAsync();
+//                    return BadRequest($"Failed to send email: {errorMessage}");
+//                }
+//            }
+//                }
+//                catch (Exception ex)
+//                {
+//                    return BadRequest($"Failed to send email: {ex.Message}");
+//    }
+//}
         }
     }
 
