@@ -4,6 +4,7 @@ using COeX_India1._2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace COeX_India1._2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231219233422_Requests")]
+    partial class Requests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,9 +49,6 @@ namespace COeX_India1._2.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SidingId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

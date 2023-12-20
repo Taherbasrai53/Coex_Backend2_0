@@ -24,7 +24,7 @@ CommonHelper.Configuration = builder.Configuration;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
     AddJwtBearer(options =>
     {
-        Console.WriteLine();
+        Console.WriteLine("Hello Tahe");
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -34,6 +34,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
+        Console.WriteLine("Hello Tahe");
         options.Events = new JwtBearerEvents
         {
             OnAuthenticationFailed = async (context) =>
@@ -56,6 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
                 }
             }
         };
+        Console.WriteLine("Hello Tahe");
     }
     );
 
