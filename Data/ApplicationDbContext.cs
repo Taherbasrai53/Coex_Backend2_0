@@ -12,5 +12,6 @@ namespace COeX_India1._2.Data
         public DbSet<Siding> Sidings { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Requests> Requests { get; set; }
+        public DbSet<Activities> Activities { get; set; }
     }
 }
